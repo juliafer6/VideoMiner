@@ -16,17 +16,20 @@ public class ChannelController {
     @Autowired
     private ChannelRepository channelRepository;
 
+    //POST
     @PostMapping
     public ResponseEntity<Channel> createChannel(@RequestBody Channel channel){
         Channel savedChannel = channelRepository.save(channel);
         return new ResponseEntity<>(savedChannel, HttpStatus.CREATED);
     }
 
+    //GET
     @GetMapping
     public List<Channel> getAllChannels(){
         return channelRepository.findAll();
     }
 
+    //GET channel by id
     @GetMapping("/{id}")
     public ResponseEntity<Channel> getChannelById(@PathVariable String id){
         Optional<Channel> channel = channelRepository.findById(id);
@@ -49,7 +52,7 @@ public class ChannelController {
             oldChannel.setCreatedTime(updatedChannel.getCreatedTime());
             oldChannel.setVideos(updatedChannel.getVideos());
 
-            Channel savedChannel = channelRepository.save(oldChannel);
+            channelRepository.save(oldChannel);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
