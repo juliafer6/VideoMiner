@@ -3,6 +3,10 @@ package aiss.videominer.controller;
 import aiss.videominer.model.Channel;
 import aiss.videominer.repository.ChannelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,8 +29,27 @@ public class ChannelController {
 
     //GET
     @GetMapping
-    public List<Channel> getAllChannels(){
-        return channelRepository.findAll();
+    public List<Channel> getAllChannels(
+            @RequestParam(defaultValue="0") int page,
+            @RequestParam(defaultValue="10") int size,
+            @RequestParam(required=false) String name,
+            @RequestParam(required=false) String order){
+        Page<Channel> pageChannels;
+        Pageable paging = PageRequest.of(page, size);
+        pageChannels = channelRepository.findAll(paging);
+        if (name!=null)
+            pageChannels = channelRepository.findByName(name, paging);
+        else
+            pageChannels = channelRepository.findAll(paging);
+        if (order!=null)
+            if(order.startsWith("-"))
+                paging=PageRequest.of(page, size, Sort.by(order.substring(1)).descending());
+            else
+                paging=PageRequest.of(page, size, Sort.by(order).ascending());
+        else
+            paging=PageRequest.of(page,size);
+        // return channelRepository.findAll();
+        return pageChannels.getContent();
     }
 
     //GET channel by id
