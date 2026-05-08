@@ -16,7 +16,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/videominer/comments")
 public class CommentController {
-
+// Controller videominer comentarios
     @Autowired
     private CommentRepository commentRepository;
 
