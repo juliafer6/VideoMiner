@@ -32,22 +32,20 @@ public class ChannelController {
     public List<Channel> getAllChannels(
             @RequestParam(defaultValue="0") int page,
             @RequestParam(defaultValue="10") int size,
-            @RequestParam(required=false) String name,
-            @RequestParam(required=false) String order){
+            @RequestParam(required=false) String name, // Filtrado de canales por nombre
+            @RequestParam(required=false) String order) {
+        Sort sort = Sort.unsorted();
+        if (order != null)
+            sort = order.startsWith("-")
+                    ? Sort.by(order.substring(1)).descending()
+                    : Sort.by(order).ascending();
+        Pageable paging = PageRequest.of(page, size, sort);
         Page<Channel> pageChannels;
-        Pageable paging = PageRequest.of(page, size);
-        pageChannels = channelRepository.findAll(paging);
-        if (name!=null)
+        if (name != null) {
             pageChannels = channelRepository.findByName(name, paging);
-        else
+        } else {
             pageChannels = channelRepository.findAll(paging);
-        if (order!=null)
-            if(order.startsWith("-"))
-                paging=PageRequest.of(page, size, Sort.by(order.substring(1)).descending());
-            else
-                paging=PageRequest.of(page, size, Sort.by(order).ascending());
-        else
-            paging=PageRequest.of(page,size);
+        }
         // return channelRepository.findAll();
         return pageChannels.getContent();
     }
