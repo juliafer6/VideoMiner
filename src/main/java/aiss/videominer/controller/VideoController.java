@@ -1,5 +1,6 @@
 package aiss.videominer.controller;
 
+import aiss.videominer.exception.VideoNotFoundException;
 import aiss.videominer.model.Channel;
 import aiss.videominer.model.Video;
 import aiss.videominer.repository.VideoRepository;
@@ -57,7 +58,7 @@ public class VideoController {
         if(video.isPresent()){
             return new ResponseEntity<>(video.get(), HttpStatus.OK);
         }else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new VideoNotFoundException(id);
         }
     }
 }

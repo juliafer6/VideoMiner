@@ -1,5 +1,6 @@
 package aiss.videominer.controller;
 
+import aiss.videominer.exception.CaptionNotFoundException;
 import aiss.videominer.model.Caption;
 import aiss.videominer.model.Channel;
 import aiss.videominer.repository.CaptionRepository;
@@ -50,7 +51,7 @@ public class CaptionController {
         if(caption.isPresent()){
             return new ResponseEntity<>(caption.get(), HttpStatus.OK);
         } else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new CaptionNotFoundException(id);
         }
     }
 }

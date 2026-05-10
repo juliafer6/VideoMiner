@@ -1,5 +1,6 @@
 package aiss.videominer.controller;
 
+import aiss.videominer.exception.CommentNotFoundException;
 import aiss.videominer.model.Comment;
 import aiss.videominer.repository.CommentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,7 @@ public class CommentController {
         if(comment.isPresent()){
             return new ResponseEntity<>(comment.get(), HttpStatus.OK);
         } else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new CommentNotFoundException(id);
         }
     }
 }

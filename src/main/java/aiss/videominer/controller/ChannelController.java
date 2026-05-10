@@ -1,5 +1,6 @@
 package aiss.videominer.controller;
 
+import aiss.videominer.exception.ChannelNotFoundException;
 import aiss.videominer.model.Channel;
 import aiss.videominer.repository.ChannelRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,7 @@ public class ChannelController {
         if(channel.isPresent()){
             return new ResponseEntity<>(channel.get(), HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ChannelNotFoundException(id);
         }
     }
 
@@ -76,7 +77,7 @@ public class ChannelController {
             channelRepository.save(oldChannel);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ChannelNotFoundException(id);
         }
     }
 
@@ -86,7 +87,7 @@ public class ChannelController {
             channelRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            throw new ChannelNotFoundException(id);
         }
     }
 }
